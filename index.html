@@ -6,8 +6,6 @@
   <title>ITS U-15女子ハンドボールクラブ 体力・持久力測定個人シート</title>
   <!-- Chart.js 読み込み -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Chart.js Annotation Plugin (目標線の描画用) -->
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@2.2.1/dist/chartjs-plugin-annotation.min.js"></script>
   <style>
     :root {
       --primary: #1e3a8a;
@@ -16,8 +14,6 @@
       --card-bg: #ffffff;
       --text-main: #0f172a;
       --text-muted: #64748b;
-      --accent-green: #16a34a;
-      --accent-amber: #d97706;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -25,87 +21,80 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       background-color: var(--bg-slate);
       color: var(--text-main);
-      padding: 1rem;
-      line-height: 1.5;
+      padding: 0.5rem;
+      line-height: 1.4;
     }
 
     .container { max-width: 900px; margin: 0 auto; }
 
     header {
       text-align: center;
-      padding: 1.5rem 1rem;
+      padding: 1rem 0.75rem;
       background: linear-gradient(135deg, var(--primary), var(--secondary));
       color: white;
-      border-radius: 12px;
-      margin-bottom: 1.5rem;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-    header h1 { font-size: 1.4rem; margin-bottom: 0.25rem; }
-    header p { font-size: 0.85rem; opacity: 0.9; }
+    header h1 { font-size: 1.2rem; margin-bottom: 0.2rem; }
+    header p { font-size: 0.8rem; opacity: 0.9; }
 
     .control-panel {
       background: var(--card-bg);
-      padding: 1.25rem;
-      border-radius: 12px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      margin-bottom: 1.5rem;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      margin-bottom: 1rem;
       display: flex;
       flex-wrap: wrap;
-      gap: 1rem;
+      gap: 0.75rem;
       align-items: center;
       justify-content: space-between;
     }
-    .select-group { display: flex; align-items: center; gap: 0.75rem; flex: 1; min-width: 260px; }
-    .select-group label { font-weight: bold; font-size: 0.95rem; white-space: nowrap; }
+    .select-group { display: flex; align-items: center; gap: 0.5rem; flex: 1; min-width: 240px; }
+    .select-group label { font-weight: bold; font-size: 0.88rem; white-space: nowrap; }
     select {
       width: 100%;
-      padding: 0.6rem 1rem;
+      padding: 0.5rem 0.75rem;
       border: 1px solid #cbd5e1;
-      border-radius: 8px;
-      font-size: 1rem;
+      border-radius: 6px;
+      font-size: 0.95rem;
       outline: none;
       background-color: #fff;
     }
-    select:focus { border-color: var(--secondary); box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2); }
 
     .btn-print {
       background-color: var(--primary);
       color: white;
       border: none;
-      padding: 0.6rem 1.2rem;
-      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
       font-weight: bold;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
+      white-space: nowrap;
     }
-    .btn-print:hover { opacity: 0.9; }
 
     .player-card {
       background: var(--card-bg);
-      border-radius: 12px;
-      padding: 1.5rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      margin-bottom: 1.5rem;
+      border-radius: 10px;
+      padding: 1rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      margin-bottom: 1rem;
     }
     .player-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
       border-bottom: 2px solid #f1f5f9;
-      padding-bottom: 0.75rem;
-      margin-bottom: 1.25rem;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
     }
-    .player-name { font-size: 1.4rem; font-weight: bold; color: var(--primary); }
-    .player-meta { font-size: 0.9rem; color: var(--text-muted); }
+    .player-name { font-size: 1.25rem; font-weight: bold; color: var(--primary); }
+    .player-meta { font-size: 0.85rem; color: var(--text-muted); margin-left: 0.5rem; }
 
     .charts-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 1.5rem;
-      margin-bottom: 1.5rem;
+      gap: 1rem;
+      margin-bottom: 1rem;
     }
     @media (min-width: 768px) {
       .charts-grid { grid-template-columns: 1fr 1fr; }
@@ -114,49 +103,61 @@
     .chart-box {
       background: #ffffff;
       border: 1px solid #e2e8f0;
-      border-radius: 10px;
-      padding: 1rem;
+      border-radius: 8px;
+      padding: 0.75rem;
     }
     .chart-box h3 {
-      font-size: 1rem;
+      font-size: 0.9rem;
       color: var(--primary);
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.5rem;
       text-align: center;
     }
 
-    .table-container { overflow-x: auto; margin-top: 1rem; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; text-align: left; }
-    th, td { padding: 0.6rem 0.75rem; border-bottom: 1px solid #e2e8f0; }
-    th { background-color: #f8fafc; font-weight: 600; color: var(--text-muted); }
+    .chart-wrapper {
+      position: relative;
+      width: 100%;
+      height: 240px;
+    }
+    @media (max-width: 480px) {
+      .chart-wrapper { height: 210px; }
+    }
+
+    .table-container { overflow-x: auto; margin-top: 0.75rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.82rem; text-align: left; }
+    th, td { padding: 0.5rem 0.5rem; border-bottom: 1px solid #e2e8f0; }
+    th { background-color: #f8fafc; font-weight: 600; color: var(--text-muted); white-space: nowrap; }
+    
     .tag {
       display: inline-block;
-      padding: 0.2rem 0.5rem;
+      padding: 0.15rem 0.4rem;
       border-radius: 4px;
       font-weight: bold;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
+      white-space: nowrap;
     }
     .tag-lvl3 { background-color: #dcfce7; color: #15803d; }
     .tag-lvl2 { background-color: #e0f2fe; color: #0369a1; }
     .tag-lvl1 { background-color: #fef3c7; color: #b45309; }
+    .tag-dummy { background-color: #f1f5f9; color: #475569; }
 
     .lap-stats {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 0.75rem;
-      margin-top: 1rem;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
       background: #f8fafc;
-      padding: 0.75rem;
-      border-radius: 8px;
+      padding: 0.5rem;
+      border-radius: 6px;
       text-align: center;
     }
-    .stat-item .label { font-size: 0.75rem; color: var(--text-muted); }
-    .stat-item .val { font-size: 1rem; font-weight: bold; color: var(--primary); }
+    .stat-item .label { font-size: 0.7rem; color: var(--text-muted); }
+    .stat-item .val { font-size: 0.9rem; font-weight: bold; color: var(--primary); }
 
     @media print {
       body { background-color: white; padding: 0; }
       .control-panel { display: none; }
       .container { max-width: 100%; }
-      .player-card { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; }
+      .player-card { box-shadow: none; border: 1px solid #ccc; }
     }
   </style>
 </head>
@@ -165,39 +166,39 @@
 <div class="container">
   <header>
     <h1>ITS U-15女子ハンドボールクラブ</h1>
-    <p>体力測定・持久力測定 個人データシート</p>
+    <p>体力・持久力測定 個人データシート</p>
   </header>
 
   <div class="control-panel">
     <div class="select-group">
-      <label for="playerSelect">選手を選択：</label>
+      <label for="playerSelect">選手選択：</label>
       <select id="playerSelect" onchange="renderPlayerData()">
-        <!-- 選手選択ドロップダウン (JavaScriptで動的生成) -->
+        <!-- JSでNo.順に生成 -->
       </select>
     </div>
-    <button class="btn-print" onclick="window.print()">
-      📄 印刷・PDF保存
-    </button>
+    <button class="btn-print" onclick="window.print()">📄 印刷・PDF出力</button>
   </div>
 
   <div class="player-card">
     <div class="player-header">
-      <div>
-        <span class="player-name" id="pName">-</span>
-        <span class="player-meta" id="pMeta">-</span>
-      </div>
+      <span class="player-name" id="pName">-</span>
+      <span class="player-meta" id="pMeta">-</span>
     </div>
 
     <div class="charts-grid">
       <!-- レーダーチャート -->
       <div class="chart-box">
-        <h3>フィジカルバランス (ポイント評価)</h3>
-        <canvas id="radarChart"></canvas>
+        <h3>フィジカルバランス (評価ポイント)</h3>
+        <div class="chart-wrapper">
+          <canvas id="radarChart"></canvas>
+        </div>
       </div>
       <!-- ラップタイム棒グラフ -->
       <div class="chart-box">
-        <h3>持久走(5.28km) 各周ラップタイム推移</h3>
-        <canvas id="lapChart"></canvas>
+        <h3>持久走(5.28km) ラップタイム推移</h3>
+        <div class="chart-wrapper">
+          <canvas id="lapChart"></canvas>
+        </div>
         <div class="lap-stats" id="lapStatsBox">
           <div class="stat-item"><div class="label">最終タイム</div><div class="val" id="statFinal">-</div></div>
           <div class="stat-item"><div class="label">平均ラップ</div><div class="val" id="statAvg">-</div></div>
@@ -207,7 +208,7 @@
     </div>
 
     <!-- 詳細データテーブル -->
-    <h3 style="font-size: 1.05rem; color: var(--primary); margin-bottom: 0.5rem;">フィジカル測定 項目別データ</h3>
+    <h3 style="font-size: 0.95rem; color: var(--primary); margin-bottom: 0.4rem;">フィジカル測定 項目別データ</h3>
     <div class="table-container">
       <table>
         <thead>
@@ -227,218 +228,22 @@
 </div>
 
 <script>
-// 選手データ一覧
-const playersData = [
-  { no: 10, name: "前城 玲奈", grade: "1年", school: "開邦中/天久小", m20: 3.48, pro: 5.88, broad: 205, triple: 5.95, gripR: 36.2, gripL: 30.2, medU: 6.5, medD: 10.15, runTime: null, laps: null },
-  { no: 17, name: "伊江 彩乃", grade: "1年", school: "安岡中/天久小", m20: 3.81, pro: 5.65, broad: 180, triple: 5.25, gripR: 28.8, gripL: 26.4, medU: 5.9, medD: 9.3, runTime: "30:44.4", laps: [316.5, 316.8, 309.9, 300.6, 303.8, 296.8], lapAvg: "05:07", lapDiff: "20秒" },
-  { no: 2, name: "奥原 桜", grade: "2年", school: "安岡中/天久小", m20: 3.71, pro: 5.42, broad: 200, triple: 4.88, gripR: 30.4, gripL: 25.1, medU: 5.7, medD: 7.2, runTime: "28:27.7", laps: [265.7, 259.2, 267.1, 313.9, 327.7, 274.2], lapAvg: "04:45", lapDiff: "68秒" },
-  { no: 3, name: "伊礼 里美", grade: "2年", school: "安岡中/天久小", m20: 4.02, pro: 6.34, broad: 175, triple: 4.60, gripR: 30.0, gripL: 29.6, medU: 6.1, medD: 7.9, runTime: "33:59.7", laps: [310.6, 342.0, 391.2, 361.1, 338.7, 296.0], lapAvg: "05:40", lapDiff: "95秒" },
-  { no: 13, name: "吉村 彩花", grade: "1年", school: "安岡中/天久小", m20: 3.87, pro: 6.27, broad: 188, triple: 5.54, gripR: 33.4, gripL: 26.8, medU: 6.7, medD: 7.5, runTime: null, laps: null },
-  { no: 15, name: "宮城 友稀", grade: "1年", school: "南風原中/北丘小", m20: 3.84, pro: 5.95, broad: 183, triple: 5.20, gripR: 24.7, gripL: 23.4, medU: 5.1, medD: 7.15, runTime: "30:54.8", laps: [333.3, 327.0, 321.8, 330.9, 290.3, 251.6], lapAvg: "05:09", lapDiff: "82秒" },
-  { no: 1, name: "金城 瑛菜", grade: "2年", school: "安岡中/天久小", m20: 3.76, pro: 6.17, broad: 170, triple: 5.36, gripR: 29.6, gripL: 27.0, medU: 5.0, medD: 5.6, runTime: "33:59.0", laps: [311.4, 341.8, 390.3, 361.0, 338.7, 295.9], lapAvg: "05:40", lapDiff: "94秒" },
-  { no: 12, name: "手嶋 麻佑", grade: "1年", school: "安岡中/天久小", m20: 4.26, pro: 6.20, broad: 150, triple: 4.85, gripR: 40.6, gripL: 30.0, medU: 5.6, medD: 6.9, runTime: "40:23.0", laps: [298.2, 405.4, 414.2, 471.1, 449.8, 384.3], lapAvg: "06:44", lapDiff: "173秒" },
-  { no: 7, name: "大城 啓渚", grade: "1年", school: "安岡中/天久小", m20: 3.78, pro: 6.08, broad: 172, triple: 4.92, gripR: 25.6, gripL: 22.8, medU: 5.7, medD: 8.3, runTime: "28:08.8", laps: [274.1, 286.2, 292.8, 296.9, 275.8, 262.8], lapAvg: "04:41", lapDiff: "34秒" },
-  { no: 6, name: "石川 千愛", grade: "2年", school: "浦西中/当山小", m20: 3.66, pro: 5.53, broad: 192, triple: 5.33, gripR: 25.5, gripL: 21.8, medU: null, medD: null, runTime: "28:28.3", laps: [263.9, 259.7, 268.0, 313.9, 327.7, 275.2], lapAvg: "04:45", lapDiff: "68秒" },
-  { no: 11, name: "平田 はるか", grade: "2年", school: "石嶺中/石嶺小", m20: 3.77, pro: 5.72, broad: 176, triple: 4.70, gripR: 30.0, gripL: 20.1, medU: null, medD: null, runTime: null, laps: null },
-  { no: 19, name: "安里 莉音", grade: "1年", school: "仲西中/宮城小", m20: 4.16, pro: 6.40, broad: 158, triple: 4.50, gripR: 31.2, gripL: 26.5, medU: 5.1, medD: 6.8, runTime: null, laps: null },
-  { no: 14, name: "石川 琴心", grade: "1年", school: "安岡中/天久小", m20: 3.48, pro: 5.79, broad: 154, triple: 4.70, gripR: 21.9, gripL: 18.2, medU: 4.1, medD: 4.6, runTime: "34:41.7", laps: [298.7, 297.4, 420.0, 297.4, 406.8, 361.5], lapAvg: "05:47", lapDiff: "123秒" },
-  { no: 8, name: "遠山 杏子", grade: "1年", school: "仲西中/仲西小", m20: 4.00, pro: 6.15, broad: 165, triple: 5.04, gripR: 28.7, gripL: 21.4, medU: null, medD: null, runTime: "34:28.0", laps: [308.0, 316.7, 335.9, 342.9, 394.3, 370.1], lapAvg: "05:45", lapDiff: "86秒" },
-  { no: 9, name: "董 悦満", grade: "1年", school: "興南中/天久小", m20: 4.27, pro: 6.37, broad: 165, triple: 4.53, gripR: 29.2, gripL: 25.4, medU: null, medD: null, runTime: "41:15.2", laps: [334.3, 373.5, 418.3, 464.6, 503.3, 381.3], lapAvg: "06:53", lapDiff: "169秒" },
-  { no: 4, name: "安里 優乃愛", grade: "2年", school: "石嶺中/城東小", m20: 3.96, pro: 6.23, broad: 152, triple: 4.58, gripR: 20.0, gripL: 19.5, medU: 2.8, medD: 5.7, runTime: "28:42.9", laps: [302.6, 271.3, 269.6, 302.3, 286.3, 290.7], lapAvg: "04:47", lapDiff: "33秒" },
-  { no: 16, name: "池村 つくし", grade: "1年", school: "仲西中/仲西小", m20: 3.81, pro: 6.03, broad: 172, triple: 4.70, gripR: 23.3, gripL: 21.2, medU: 5.3, medD: 5.1, runTime: null, laps: null }
-];
-
-// 基準設定
-const AceTargets = { m20: 3.30, pro: 5.20, broad: 200, triple: 6.5, gripR: 28.0, gripL: 28.0, medU: 6.0, medD: 7.5 };
-const TeamAvgs = { m20: 3.86, pro: 6.02, broad: 174.3, triple: 4.99, gripR: 29.1, gripL: 24.4, medU: 5.35, medD: 7.09 };
-
-let radarChartObj = null;
-let lapChartObj = null;
-
-// ドロップダウン初期化
-window.onload = function() {
-  const select = document.getElementById("playerSelect");
-  playersData.forEach((p, idx) => {
-    const opt = document.createElement("option");
-    opt.value = idx;
-    opt.textContent = `【${p.grade}】 No.${p.no} ${p.name}`;
-    select.appendChild(opt);
-  });
-  renderPlayerData();
+// ダミーデータ（チーム平均値）
+const dummyPlayer = {
+  no: 0,
+  name: "選択してください（チーム平均値）",
+  grade: "全体の基準値",
+  school: "-",
+  m20: 3.86, pro: 6.02, broad: 174.3, triple: 4.99, gripR: 29.1, gripL: 24.4, medU: 5.35, medD: 7.09,
+  runTime: "32:51.0",
+  laps: [301.0, 316.0, 342.0, 346.0, 354.0, 312.0], // チーム平均ラップ 05:01, 05:16, 05:42, 05:46, 05:54, 05:12
+  lapAvg: "05:29",
+  lapDiff: "87秒",
+  isDummy: true
 };
 
-// 得点判定関数 (3:ターゲット達成, 2:基準クリア, 1:伸び代)
-function getScore(key, val) {
-  if (val === null || val === undefined) return 0;
-  const isLowerBetter = (key === 'm20' || key === 'pro');
-  if (isLowerBetter) {
-    if (val <= AceTargets[key]) return 3;
-    if (val <= TeamAvgs[key]) return 2;
-    return 1;
-  } else {
-    if (val >= AceTargets[key]) return 3;
-    if (val >= TeamAvgs[key]) return 2;
-    return 1;
-  }
-}
-
-// 分:秒フォーマット変換
-function formatMinSec(seconds) {
-  if (!seconds) return "-";
-  const m = Math.floor(seconds / 60);
-  const s = Math.round(seconds % 60);
-  return `${m}:${s < 10 ? '0' : ''}${s}`;
-}
-
-// メイン描画処理
-function renderPlayerData() {
-  const pIdx = document.getElementById("playerSelect").value;
-  const p = playersData[pIdx];
-
-  document.getElementById("pName").textContent = p.name;
-  document.getElementById("pMeta").textContent = `（${p.grade} / 出身: ${p.school}）`;
-
-  // 1. レーダーチャートデータの作成
-  const keys = ['m20', 'pro', 'broad', 'triple', 'gripR', 'gripL', 'medU', 'medD'];
-  const labels = ['20m走', 'プロアジ', '立ち幅跳び', '立ち三段', '握力(右)', '握力(左)', 'メディ(上)', 'メディ(下)'];
-  const scores = keys.map(k => getScore(k, p[k]));
-
-  // レーダーチャート描画
-  if (radarChartObj) radarChartObj.destroy();
-  const ctxR = document.getElementById('radarChart').getContext('2d');
-  radarChartObj = new Chart(ctxR, {
-    type: 'radar',
-    data: {
-      labels: labels,
-      datasets: [
-        {
-          label: '個人評価ポイント',
-          data: scores,
-          backgroundColor: 'rgba(2, 132, 199, 0.25)',
-          borderColor: '#0284c7',
-          borderWidth: 2,
-          pointBackgroundColor: '#0284c7'
-        },
-        {
-          label: 'チーム基準ライン(2点)',
-          data: [2,2,2,2,2,2,2,2],
-          borderColor: 'rgba(100, 116, 139, 0.5)',
-          borderWidth: 1,
-          borderDash: [4, 4],
-          fill: false,
-          pointRadius: 0
-        }
-      ]
-    },
-    options: {
-      scales: {
-        r: {
-          min: 0,
-          max: 3,
-          ticks: { stepSize: 1, callback: v => v === 3 ? '目標' : v === 2 ? '基準' : '' }
-        }
-      },
-      plugins: { legend: { display: false } }
-    }
-  });
-
-  // 2. ラップタイム棒グラフ描画
-  if (lapChartObj) lapChartObj.destroy();
-  const ctxL = document.getElementById('lapChart').getContext('2d');
-  
-  if (p.laps && p.laps.length === 6) {
-    document.getElementById("lapStatsBox").style.display = "grid";
-    document.getElementById("statFinal").textContent = p.runTime;
-    document.getElementById("statAvg").textContent = p.lapAvg;
-    document.getElementById("statDiff").textContent = p.lapDiff;
-
-    lapChartObj = new Chart(ctxL, {
-      type: 'bar',
-      data: {
-        labels: ['1周', '2周', '3周', '4周', '5周', '6周'],
-        datasets: [{
-          label: 'ラップタイム(秒)',
-          data: p.laps,
-          backgroundColor: ['#1e3a8a', '#1e3a8a', '#1e3a8a', '#d97706', '#ea580c', '#16a34a'],
-          borderRadius: 4
-        }]
-      },
-      options: {
-        scales: {
-          y: {
-            title: { display: true, text: '秒数' },
-            min: 180,
-            max: 540
-          }
-        },
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            callbacks: {
-              label: ctx => ` タイム: ${formatMinSec(ctx.raw)} (${ctx.raw}秒)`
-            }
-          }
-        }
-      }
-    });
-  } else {
-    // 持久走未測定の場合
-    document.getElementById("lapStatsBox").style.display = "none";
-    lapChartObj = new Chart(ctxL, {
-      type: 'bar',
-      data: { labels: ['データなし'], datasets: [] },
-      options: {
-        plugins: {
-          subtitle: { display: true, text: '※持久走測定データは未登録です', color: '#64748b' }
-        }
-      }
-    });
-  }
-
-  // 3. テーブル詳細データの挿入
-  const tbody = document.getElementById("physicalTableBody");
-  tbody.innerHTML = "";
-  
-  const itemsMeta = [
-    { key: 'm20', label: '20m走', unit: '秒' },
-    { key: 'pro', label: 'プロアジリティ', unit: '秒' },
-    { key: 'broad', label: '立ち幅跳び', unit: 'cm' },
-    { key: 'triple', label: '立ち三段跳び', unit: 'm' },
-    { key: 'gripR', label: '握力（右）', unit: 'kg' },
-    { key: 'gripL', label: '握力（左）', unit: 'kg' },
-    { key: 'medU', label: 'メディシンボール（上）', unit: 'm' },
-    { key: 'medD', label: 'メディシンボール（下）', unit: 'm' }
-  ];
-
-  itemsMeta.forEach(item => {
-    const val = p[item.key];
-    const score = getScore(item.key, val);
-    const tr = document.createElement("tr");
-
-    let tagHtml = "", msgHtml = "";
-    if (score === 3) {
-      tagHtml = `<span class="tag tag-lvl3">Level 3</span>`;
-      msgHtml = `🌟 ターゲット達成！チームの大きな強みです。`;
-    } else if (score === 2) {
-      tagHtml = `<span class="tag tag-lvl2">Level 2</span>`;
-      msgHtml = `👍 チーム基準クリア。次の目標へステップアップ！`;
-    } else if (score === 1) {
-      tagHtml = `<span class="tag tag-lvl1">Level 1</span>`;
-      msgHtml = `💡 今後の伸びしろテーマ。トレーニングで変化が出やすい項目です。`;
-    } else {
-      tagHtml = `<span class="tag">-</span>`;
-      msgHtml = `未測定`;
-    }
-
-    tr.innerHTML = `
-      <td><strong>${item.label}</strong></td>
-      <td>${val !== null ? val + ' ' + item.unit : '-'}</td>
-      <td>${tagHtml}</td>
-      <td style="font-size:0.82rem; color:#475569;">${msgHtml}</td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
-</script>
-</body>
-</html>
+// 選手データ一覧（No.順）
+const rawPlayersData = [
+  { no: 1, name: "金城 瑛菜", grade: "2年", school: "安岡中/天久小", m20: 3.76, pro: 6.17, broad: 170, triple: 5.36, gripR: 29.6, gripL: 27.0, medU: 5.0, medD: 5.6, runTime: "33:59.0", laps: [311.4, 341.8, 390.3, 361.0, 338.7, 295.9], lapAvg: "05:40", lapDiff: "94秒" },
+  { no: 2, name: "奥原 桜", grade: "2年", school: "安岡中/天久小", m20: 3.71, pro: 5.42, broad: 200, triple: 4.88, gripR: 30.4, gripL: 25.1, medU: 5.7, medD: 7.2, runTime: "28:27.7", laps: [265.7, 259.2, 267.1, 313.9, 327.7, 274.2], lapAvg: "04:45", lapDiff: "68秒" },
+  { no: 3, name: "伊礼 里美", grade: "2年", school: "安岡中/天久小", m20: 4.02, pro: 6.34, broad: 175, triple: 4.60, gripR: 3
